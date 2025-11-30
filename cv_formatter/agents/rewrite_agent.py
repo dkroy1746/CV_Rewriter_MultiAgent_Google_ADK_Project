@@ -32,11 +32,17 @@ class RewriteAgent:
             - Incorporate relevant keywords from the JD naturally
             - Highlight experiences and skills that match the role
             - Adjust the tone and emphasis to match company culture
-            - Maintain the original CV format structure
             - Ensure all claims are based on the original CV content
             - Optimize for ATS keyword matching without keyword stuffing
 
-            Output the reformatted CV text that will maximize ATS score while staying authentic.
+            Format the output as a complete, well-structured CV with clear sections:
+            - Use clear section headers (e.g., PROFESSIONAL SUMMARY, SKILLS, EXPERIENCE, EDUCATION)
+            - Separate sections with blank lines
+            - Use bullet points for lists
+            - Keep formatting clean and ATS-friendly (no tables, columns, or complex formatting)
+            - Make it ready to be converted to different formats (plain text, markdown, HTML)
+
+            Output the complete reformatted CV text that will maximize ATS score while staying authentic.
             """,
             tools=[google_search],
             output_key="Reformatted_CV",

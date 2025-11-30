@@ -90,14 +90,62 @@ CVFormatter/
 ### Basic Usage
 
 ```bash
-pixi run python -m cv_formatter.main <cv_pdf_path> <jd_txt_path>
+pixi run python -m cv_formatter.main <cv_pdf_path> <jd_txt_path> [OPTIONS]
 ```
 
-### Example
+### Command-Line Options
 
+- `cv_pdf_path`: Path to your CV PDF file (required)
+- `jd_txt_path`: Path to the Job Description text file (required)
+- `-o, --output FILE`: Save output to file (if not specified, prints to terminal)
+- `-f, --format FORMAT`: Output format: `plain`, `markdown`, or `html` (default: plain)
+- `-q, --quiet`: Suppress progress messages, only show final output
+- `-h, --help`: Show help message
+
+### Examples
+
+**1. Print to terminal (default):**
 ```bash
-pixi run python -m cv_formatter.main ./my_resume.pdf ./job_description.txt
+pixi run python -m cv_formatter.main cv.pdf jd.txt
 ```
+
+**2. Save to file:**
+```bash
+pixi run python -m cv_formatter.main cv.pdf jd.txt -o reformatted_cv.txt
+```
+
+**3. Save as Markdown:**
+```bash
+pixi run python -m cv_formatter.main cv.pdf jd.txt -o cv.md -f markdown
+```
+
+**4. Save as HTML:**
+```bash
+pixi run python -m cv_formatter.main cv.pdf jd.txt -o cv.html -f html
+```
+
+**5. Quiet mode (minimal output):**
+```bash
+pixi run python -m cv_formatter.main cv.pdf jd.txt -o output.txt -q
+```
+
+### Output Formats
+
+**Plain Text** (`-f plain`)
+- Clean, ATS-friendly plain text format
+- Best for copy-pasting into application forms
+- Default format
+
+**Markdown** (`-f markdown`)
+- Formatted with Markdown headers and structure
+- Includes metadata (generation timestamp)
+- Great for GitHub, documentation tools, or converting to other formats
+
+**HTML** (`-f html`)
+- Professional HTML document with CSS styling
+- Print-ready with @media print styles
+- Can be opened directly in web browsers
+- Styled with clean, professional formatting
 
 ### Expected Output
 
