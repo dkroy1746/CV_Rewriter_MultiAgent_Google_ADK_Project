@@ -1,4 +1,4 @@
-# CV Formatter
+# CV Rewriter Multi-Agent
 
 A multi-agent system built with Google ADK (Agent Development Kit) that optimizes CVs to match job descriptions and maximize ATS (Applicant Tracking System) scores.
 
@@ -11,7 +11,7 @@ A multi-agent system built with Google ADK (Agent Development Kit) that optimize
 - **PDF and .txt Parsing Tool**: Extracts text from CV PDFs using Apache Tika and text from the txt file.
 - **Built-In google_search Tool**: Using google_search tool to assist Company Agent to find out about the company.
 - **Context Sharing**: Agents share information through shared context state
-- **Sessions & Memory**: The orchestrator shares the session memory across all the sessions
+- **Sessions & Memory**: Memory is shared across all the sessions using InMemorySessionService() and InMemoryMemoryService()
 - **Modular OOP Design**: Clean, maintainable architecture
 
 ## Architecture
@@ -90,7 +90,6 @@ graph TD
     style RewriteAgent fill:#388e3c,stroke:#1b5e20,color:#ffffff
 ```
 ## How It Works
-
 ### Agents
 1. **CV Sequential Agent**:
    - PDF Parser tool extracts text from CV
@@ -127,7 +126,6 @@ Agents share data through context state:
 6. Generate an optimized CV
   
 **Key Components:**
-
 - **Parallel Processing**: CV and JD are processed simultaneously for efficiency
 - **Context Sharing**: All agents share state through context variables (`CV_text`, `JD_context`, etc.)
 - **Sequential Workflow**: Company research → Final CV rewrite happens after initial processing
@@ -136,13 +134,11 @@ Agents share data through context state:
 - **Output Formats**: Supports plain text, Markdown, and HTML output
 
 ## Prerequisites
-
 - Python 3.14+
 - [Pixi](https://pixi.sh/) package manager
 - Google API key with Generative AI access
 
 ## Installation
-
 1. **Clone or navigate to the project**:
    
    ```bash
@@ -181,11 +177,9 @@ Agents share data through context state:
 ## Usage
 
 ### Basic Usage
-
 ```bash
 pixi run python -m cv_formatter.main <cv_pdf_path> <jd_txt_path> [OPTIONS]
 ```
-
 ### Command-Line Options
 
 - `cv_pdf_path`: Path to your CV PDF file (required)
@@ -198,31 +192,26 @@ pixi run python -m cv_formatter.main <cv_pdf_path> <jd_txt_path> [OPTIONS]
 ### Examples
 
 **1. Print to terminal (default):**
-
 ```bash
 pixi run python -m cv_formatter.main cv.pdf jd.txt
 ```
 
 **2. Save to file:**
-
 ```bash
 pixi run python -m cv_formatter.main cv.pdf jd.txt -o reformatted_cv.txt
 ```
 
 **3. Save as Markdown:**
-
 ```bash
 pixi run python -m cv_formatter.main cv.pdf jd.txt -o cv.md -f markdown
 ```
 
 **4. Save as HTML:**
-
 ```bash
 pixi run python -m cv_formatter.main cv.pdf jd.txt -o cv.html -f html
 ```
 
 **5. Quiet mode (minimal output):**
-
 ```bash
 pixi run python -m cv_formatter.main cv.pdf jd.txt -o output.txt -q
 ```
