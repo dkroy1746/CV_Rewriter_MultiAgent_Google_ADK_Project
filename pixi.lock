@@ -403,7 +403,7 @@ packages:
 - pypi: ./
   name: cvformatter
   version: 0.1.0
-  sha256: 469e254643ba016bb7e05312bb0570aec1dea4fc6cb046140a4cac46133798b8
+  sha256: f872d318a48f013deed85f0006d75e2f8a1d55e7dad64df30326c656d44ff5e7
   requires_dist:
   - google-adk>=1.14.1
   - google-genai>=1.52.0

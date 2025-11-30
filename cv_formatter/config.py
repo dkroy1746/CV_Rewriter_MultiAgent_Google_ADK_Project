@@ -25,7 +25,7 @@ class Config:
         os.environ["GOOGLE_API_KEY"] = self.google_api_key
 
         # App configuration
-        self.app_name = os.getenv("APP_NAME", "CVFormatter")
+        self.app_name = os.getenv("APP_NAME", "agents")
         self.user_id = os.getenv("USER_ID", "default_user")
 
         # Model configuration

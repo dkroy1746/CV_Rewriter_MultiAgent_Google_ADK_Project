@@ -42,6 +42,52 @@ CVFormatter/
 └── README.md
 ```
 
+## Workflow Overview
+
+```mermaid
+graph TD
+    Start([User Input: CV PDF + JD Text]) --> ParallelStart{Parallel Processing}
+
+    ParallelStart --> CVPath[CV Path]
+    ParallelStart --> JDPath[JD Path]
+
+    CVPath --> PDFParser[PDF Parser Agent<br/>Extract CV Text]
+    PDFParser --> CVAgent[CV Agent<br/>Comprehensive Analysis]
+    CVAgent --> CVContext[CV_context<br/>CV_text]
+
+    JDPath --> TxtParser[Text Parser Agent<br/>Read JD File]
+    TxtParser --> JDAgent[JD Agent<br/>Requirements Analysis]
+    JDAgent --> JDContext[JD_context<br/>JD_text]
+
+    CVContext --> Merge{Combine Context}
+    JDContext --> Merge
+
+    Merge --> CompanyAgent[Company Agent<br/>Research Company<br/>via Google Search]
+    CompanyAgent --> CompanyContext[Company_context]
+
+    CompanyContext --> RewriteAgent[Rewrite Agent<br/>Generate ATS-Optimized CV]
+
+    RewriteAgent --> Output([Reformatted CV<br/>Plain/Markdown/HTML])
+
+    style Start fill:#e1f5ff
+    style Output fill:#d4edda
+    style ParallelStart fill:#fff3cd
+    style Merge fill:#fff3cd
+    style PDFParser fill:#f8d7da
+    style TxtParser fill:#f8d7da
+    style CVAgent fill:#d1ecf1
+    style JDAgent fill:#d1ecf1
+    style CompanyAgent fill:#d1ecf1
+    style RewriteAgent fill:#c3e6cb
+```
+
+**Key Components:**
+
+- **Parallel Processing**: CV and JD are processed simultaneously for efficiency
+- **Context Sharing**: All agents share state through context variables (`CV_text`, `JD_context`, etc.)
+- **Sequential Workflow**: Company research → Final CV rewrite happens after initial processing
+- **Output Formats**: Supports plain text, Markdown, and HTML output
+
 ## Prerequisites
 
 - Python 3.14+

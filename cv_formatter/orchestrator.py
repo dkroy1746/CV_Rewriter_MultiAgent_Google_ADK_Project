@@ -1,8 +1,13 @@
 """Orchestrator for managing the CV reformatting workflow."""
+import warnings
+import logging
+import sys
+import io
 from pathlib import Path
 from typing import Optional
+from contextlib import redirect_stderr
 
-from google.adk.agents import SequentialAgent, LlmAgent
+from google.adk.agents import SequentialAgent, ParallelAgent, LlmAgent
 from google.adk.models.google_llm import Gemini
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
@@ -10,6 +15,14 @@ from google.adk.memory import InMemoryMemoryService
 from google.genai import types
 
 from cv_formatter.config import config
+
+# Suppress expected warnings from dependencies
+warnings.filterwarnings("ignore", message="pkg_resources is deprecated")
+warnings.filterwarnings("ignore", message=".*non-text parts in the response.*")
+
+# Suppress verbose ADK logging
+logging.getLogger("google.adk").setLevel(logging.ERROR)
+
 from cv_formatter.agents import (
     PDFParserAgent,
     TxtParserAgent,
@@ -18,6 +31,28 @@ from cv_formatter.agents import (
     CompanyAgent,
     RewriteAgent,
 )
+
+
+class _StderrFilter:
+    """Filter to suppress specific ADK warnings printed to stderr."""
+
+    def __init__(self, original_stderr):
+        self.original_stderr = original_stderr
+        self.suppressed_patterns = [
+            "App name mismatch detected",
+            "non-text parts in the response",
+        ]
+
+    def write(self, text):
+        # Only write if text doesn't contain suppressed patterns
+        if not any(pattern in text for pattern in self.suppressed_patterns):
+            self.original_stderr.write(text)
+
+    def flush(self):
+        self.original_stderr.flush()
+
+    def fileno(self):
+        return self.original_stderr.fileno()
 
 
 class CVFormatterOrchestrator:
@@ -50,8 +85,25 @@ class CVFormatterOrchestrator:
             ],
         )
 
-        # Create root orchestrator agent
-        self.root_agent = self._create_root_agent()
+        # Create a parallel agent for CV and JD processing
+        self.parallel_processing = ParallelAgent(
+            name="Parallel_Processing_Agent",
+            sub_agents=[
+                self.cv_sequential,
+                self.jd_sequential,
+            ],
+        )
+
+        # Create the complete sequential workflow
+        # This will automatically execute all agents in order
+        self.root_agent = SequentialAgent(
+            name="Complete_CV_Formatter_Workflow",
+            sub_agents=[
+                self.parallel_processing,  # Process CV and JD in parallel
+                self.company_agent.get_agent(),  # Research company
+                self.rewrite_agent.get_agent(),  # Generate reformatted CV
+            ],
+        )
 
         # Create services
         self.session_service = InMemorySessionService()
@@ -63,45 +115,6 @@ class CVFormatterOrchestrator:
             app_name=config.app_name,
             session_service=self.session_service,
             memory_service=self.memory_service,
-        )
-
-    def _create_root_agent(self) -> LlmAgent:
-        """Create the root orchestrator agent."""
-        return LlmAgent(
-            name="ROOT_Agent",
-            model=Gemini(model=config.model_name),
-            instruction="""You are the root orchestrator agent for CV reformatting.
-
-            You MUST complete ALL of the following steps in order. Do not stop until you have the final reformatted CV.
-
-            **STEP 1:** Extract the CV PDF path and JD text file path from user input.
-
-            **STEP 2:** Call CV_Sequential_Agent sub-agent with the PDF path.
-            Wait for it to complete parsing and analysis. You will receive CV_text and CV_context.
-
-            **STEP 3:** Call JD_Sequential_Agent sub-agent with the text file path.
-            Wait for it to complete parsing and analysis. You will receive JD_text and JD_context.
-
-            **STEP 4:** From the JD_context or JD_text, identify the company name.
-
-            **STEP 5:** Call Company_Agent sub-agent with the company name.
-            Wait for it to complete research. You will receive Company_context.
-
-            **STEP 6:** Call Rewrite_Agent sub-agent.
-            This agent has access to CV_context, JD_context, and Company_context from the shared state.
-            Wait for it to generate the complete reformatted CV.
-
-            **STEP 7:** Return ONLY the reformatted CV from Rewrite_Agent as your final response.
-            Do NOT return intermediate analysis - only return the final reformatted CV text.
-
-            IMPORTANT: You must complete all 7 steps. The reformatted CV is your only output to the user.
-            """,
-            sub_agents=[
-                self.cv_sequential,
-                self.jd_sequential,
-                self.company_agent.get_agent(),
-                self.rewrite_agent.get_agent(),
-            ],
         )
 
     async def format_cv(
@@ -152,22 +165,36 @@ class CVFormatterOrchestrator:
             role="user", parts=[types.Part(text=query)]
         )
 
-        # Collect response - keep only the last final response (from ROOT_Agent)
+        # Collect response - the last agent in the sequence (Rewrite_Agent) produces the final CV
         reformatted_cv = ""
-        async for event in self.runner.run_async(
-            user_id=config.user_id,
-            session_id=session.id,
-            new_message=query_content,
-        ):
-            # Only collect final responses
-            if event.is_final_response() and event.content and event.content.parts:
-                text = event.content.parts[0].text
-                if text and text != "None":
-                    # Keep updating - the last one will be from ROOT_Agent with the reformatted CV
-                    reformatted_cv = text
+
+        # Temporarily replace stderr to filter ADK warnings
+        original_stderr = sys.stderr
+        sys.stderr = _StderrFilter(original_stderr)
+
+        try:
+            async for event in self.runner.run_async(
+                user_id=config.user_id,
+                session_id=session.id,
+                new_message=query_content,
+            ):
+                # Collect all final responses, the last one will be from Rewrite_Agent
+                if event.is_final_response() and event.content and event.content.parts:
+                    # Extract only text parts, filtering out function_call parts
+                    text_parts = [part.text for part in event.content.parts if hasattr(part, 'text') and part.text]
+                    if text_parts:
+                        text = "".join(text_parts)
+                        if text != "None":
+                            # Keep updating - the last response is from Rewrite_Agent
+                            reformatted_cv = text
+        finally:
+            # Restore original stderr
+            sys.stderr = original_stderr
 
         if not reformatted_cv:
-            raise RuntimeError("No reformatted CV was generated. The workflow may not have completed.")
+            raise RuntimeError(
+                "No reformatted CV was generated. The workflow may not have completed all steps."
+            )
 
         return reformatted_cv
 
@@ -204,9 +231,17 @@ class CVFormatterOrchestrator:
         print(f"JD Path: {jd_path.absolute()}")
         print(f"{'='*80}\n")
 
-        # Use runner's debug method
-        await self.runner.run_debug(
-            user_messages=query,
-            user_id=config.user_id,
-            session_id=session_id,
-        )
+        # Temporarily replace stderr to filter ADK warnings
+        original_stderr = sys.stderr
+        sys.stderr = _StderrFilter(original_stderr)
+
+        try:
+            # Use runner's debug method
+            await self.runner.run_debug(
+                user_messages=query,
+                user_id=config.user_id,
+                session_id=session_id,
+            )
+        finally:
+            # Restore original stderr
+            sys.stderr = original_stderr
