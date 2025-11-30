@@ -69,7 +69,6 @@ graph TD
 
     RewriteAgent --> Output([Reformatted CV<br/>Plain/Markdown/HTML])
 
-%% High-contrast styles
     style Start fill:#1976d2,stroke:#0d47a1,color:#ffffff
     style Output fill:#2e7d32,stroke:#1b5e20,color:#ffffff
 
@@ -86,11 +85,12 @@ graph TD
     style JDAgent fill:#0277bd,stroke:#01579b,color:#ffffff
     style CompanyAgent fill:#00838f,stroke:#006064,color:#ffffff
 
-    style CVContext fill:#212121,stroke:#000000,color:#ffffff
-    style JDContext fill:#212121,stroke:#000000,color:#ffffff
+    style CVContext fill:#C39BD3,stroke:#8A2BE2,color:#FFFFFF
+    style JDContext fill:#C39BD3,stroke:#8A2BE2,color:#FFFFFF
     style CompanyContext fill:#212121,stroke:#000000,color:#ffffff
 
-    style RewriteAgent fill:#388e3c,stroke:#1b5e20,color:#ffffff```
+    style RewriteAgent fill:#388e3c,stroke:#1b5e20,color:#ffffff
+```
 
 **Key Components:**
 
