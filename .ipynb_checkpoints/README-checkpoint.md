@@ -3,12 +3,13 @@
 A multi-agent system built with Google ADK (Agent Development Kit) that optimizes CVs to match job descriptions and maximize ATS (Applicant Tracking System) scores.
 
 ## Features
-- **PDF and .txt Parsing Tool**: Extracts text from CV PDFs using Apache Tika and text from the txt file.
 - **Multi-Agent Architecture**: Uses specialized agents **parallelly** and **sequentially** for different tasks:
   - CV Agent: Analyzes candidate profile and skills
   - JD Agent: Analyzes job requirements
   - Company Agent: Researches company information
   - Rewrite Agent: Optimizes CV for ATS
+- **PDF and .txt Parsing Tool**: Extracts text from CV PDFs using Apache Tika and text from the txt file.
+- **Built-In google_search Tool**: Using google_search tool to assist Company Agent to find out about the company.
 - **Context Sharing**: Agents share information through shared context state
 - **Sessions & Memory**: The orchestrator shares the session memory across all the sessions
 - **Modular OOP Design**: Clean, maintainable architecture
@@ -92,18 +93,18 @@ graph TD
 
 ### Agents
 1. **CV Sequential Agent**:
-   - PDF Parser Agent extracts text from CV
+   - PDF Parser tool extracts text from CV
    - CV Agent analyzes candidate profile
 
-3. **JD Sequential Agent**:   
-   - Text Parser Agent reads job description
+2. **JD Sequential Agent**:   
+   - Text Parser tool reads job description
    - JD Agent analyzes job requirements
 
-4. **Company Agent**:   
-   - Uses Google Search to research the company
+3. **Company Agent**:   
+   - Uses google_search tool to research the company
    - Gathers vision, culture, and goals
 
-5. **Rewrite Agent**:   
+4. **Rewrite Agent**:   
    - Combines all analyses
    - Generates ATS-optimized CV
    - Maintains authenticity
@@ -122,7 +123,7 @@ Agents share data through context state:
 2. Parse the job description text file
 3. Analyze your CV content (skills, experience, keywords)
 4. Analyze the JD requirements
-5. Research the hiring company
+5. Research the hiring company using the google_search tool
 6. Generate an optimized CV
   
 **Key Components:**
@@ -130,6 +131,7 @@ Agents share data through context state:
 - **Parallel Processing**: CV and JD are processed simultaneously for efficiency
 - **Context Sharing**: All agents share state through context variables (`CV_text`, `JD_context`, etc.)
 - **Sequential Workflow**: Company research → Final CV rewrite happens after initial processing
+- **Custom and Built-In Tools**: Use of built-in google_search tool and custom tools like PDF and .txt parser
 - **Sessions and Memory**: Memory management for retrieving conversation history and state
 - **Output Formats**: Supports plain text, Markdown, and HTML output
 
