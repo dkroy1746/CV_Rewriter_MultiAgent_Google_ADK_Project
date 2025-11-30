@@ -1,0 +1,45 @@
+"""CV Rewrite Agent for optimizing CV for ATS."""
+from google.adk.agents import LlmAgent
+from google.adk.models.google_llm import Gemini
+from google.adk.tools import google_search
+
+
+class RewriteAgent:
+    """Agent for rewriting CVs to match job descriptions."""
+
+    def __init__(self):
+        """Initialize Rewrite Agent."""
+        self.agent = self._create_agent()
+
+    def _create_agent(self) -> LlmAgent:
+        """Create and configure the LLM agent."""
+        return LlmAgent(
+            name="Rewrite_Agent",
+            model=Gemini(model="gemini-2.0-flash-exp"),
+            instruction="""You are an intelligent CV Rewriting Agent.
+
+            Your goal is to rewrite/optimize the candidate's CV to maximize the Applicant Tracking System (ATS) score.
+
+            Use ALL of the following information:
+            1. **CV Analysis** ({CV_context}): The candidate's skills, profile, and work experience
+            2. **JD Analysis** ({JD_context}): The job requirements and key qualifications
+            3. **Company Profile** ({Company_context}): The company's vision, culture, and goals
+
+            Instructions:
+            - Align the CV content with the job requirements while maintaining truthfulness
+            - Incorporate relevant keywords from the JD naturally
+            - Highlight experiences and skills that match the role
+            - Adjust the tone and emphasis to match company culture
+            - Maintain the original CV format structure
+            - Ensure all claims are based on the original CV content
+            - Optimize for ATS keyword matching without keyword stuffing
+
+            Output the reformatted CV text that will maximize ATS score while staying authentic.
+            """,
+            tools=[google_search],
+            output_key="Reformatted_CV",
+        )
+
+    def get_agent(self) -> LlmAgent:
+        """Get the underlying LLM agent."""
+        return self.agent

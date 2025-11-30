@@ -1,6 +1,7 @@
 [project]
 authors = [{name = "digital-idiot", email = "abhisek.maiti@systemiq.earth"}]
-dependencies = []
+description = "Multi-agent CV optimization system using Google ADK"
+dependencies = ["google-adk>=1.14.1", "google-genai>=1.52.0", "python-dotenv>=1.2.1", "tika>=3.1.0"]
 name = "CVFormatter"
 requires-python = ">= 3.11"
 version = "0.1.0"
@@ -17,3 +18,9 @@ platforms = ["osx-arm64"]
 cvformatter = { path = ".", editable = true }
 
 [tool.pixi.tasks]
+
+[tool.pixi.dependencies]
+python = ">=3.14.0,<3.15"
+google-genai = ">=1.52.0,<2"
+python-dotenv = ">=1.2.1,<2"
+tika = ">=3.1.0,<4"

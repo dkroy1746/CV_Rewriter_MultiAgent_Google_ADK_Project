@@ -1,0 +1,42 @@
+
+About the job
+
+Quantitative Researcher | Trading Team – Bangalore
+
+Minix Meril Group
+
+Minix Meril is committed to world-class research grounded in deep scientific rigor. We empower exceptional minds in Mathematics, Physics, Engineering, and Computer Science to explore the edges of what’s possible — and then push beyond them. Our culture thrives on innovation: fearless experimentation, creative exploration, intellectual honesty, and a competitive spark that never dims.
+
+
+Our trading teams bring together traders, quantitative researchers, and engineers who study global markets with almost scientific devotion. Using exquisite statistical analysis and data-mining craftsmanship, they decode market behaviors and build predictive trading models that deliver measurable edge.
+
+As we expand in Bangalore, India, Minix Meril is strengthening its capabilities across Trading, Technology, and Operations. This is a start-up-style environment powered by global resources — fast, focused, and full of possibility.
+
+What You’ll Do
+
+    Gather and analyze global financial market data to identify hidden patterns and structural behaviors.
+    Apply advanced statistical analysis and data-mining techniques to build forecasts and develop profitable predictive trading models.
+    Collaborate closely with traders, engineers, and researchers to design, refine, and optimize trading strategies.
+    Partner with technology and business teams to support cutting-edge electronic trading initiatives.
+    Contribute to continuous innovation and evolution of research capabilities.
+    Perform additional duties as required in a fast-paced, high-performance environment.
+
+Skills You’ll Need
+
+    A creative, driven, self-motivated problem solver who enjoys tackling complex challenges.
+    Strong programming skills in C++ and Python within a Linux ecosystem.
+    Familiarity with Python, R, or MATLAB, with the ability to build research-centric tools and frameworks.
+    Strong grounding in forecasting, modeling, and data-mining methods — including regression (linear & non-linear), neural networks, support vector machines, or related ML techniques.
+    Passion for advancing machine learning applications within trading and market prediction.
+    Masters or PhD in Statistics, Mathematics, Physics, Engineering, or a related quantitative field.
+    Willingness to thrive in a collaborative, team-centric culture.
+    Reliable and predictable availability.
+
+Good to Have
+
+    Demonstrated success designing or implementing profitable trading strategies.
+    Experience deploying statistical or machine learning models in a live trading environment.
+    Experience working with large-scale datasets and real-time market data frameworks.
+    Strong research publications or past contributions in quantitative modeling.
+
+
