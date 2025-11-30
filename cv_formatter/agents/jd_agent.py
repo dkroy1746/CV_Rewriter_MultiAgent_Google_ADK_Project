@@ -14,7 +14,7 @@ class JDAgent:
         """Create and configure the LLM agent."""
         return LlmAgent(
             name="JD_Agent",
-            model=Gemini(model="gemini-2.0-flash-exp"),
+            model=Gemini(model="gemini-2.5-flash"),
             instruction="""You are a Job Description Comprehension Agent.
 
             Using the Job Description (JD) text provided in {JD_text}:

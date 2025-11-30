@@ -15,14 +15,14 @@ class TxtParserAgent:
         self.agent = self._create_agent()
 
     def _read_text_file(
-        self, file_path: str, context: ToolContext, encoding: str = "utf-8"
+        self, file_path: str, tool_context: ToolContext, encoding: str = "utf-8"
     ) -> str:
         """
         Read text file and store in context.
 
         Args:
             file_path: Path to the text file
-            context: Tool context for storing state
+            tool_context: Tool context for storing state
             encoding: File encoding
 
         Returns:
@@ -30,7 +30,7 @@ class TxtParserAgent:
         """
         text = self.parser.read_file(file_path, encoding)
         # Store in context state so other agents can access it
-        context.state["JD_text"] = text
+        tool_context.state["JD_text"] = text
         return text
 
     def _create_agent(self) -> LlmAgent:
@@ -38,7 +38,7 @@ class TxtParserAgent:
         txt_extract = FunctionTool(self._read_text_file)
 
         return LlmAgent(
-            model=Gemini(model="gemini-2.0-flash-exp"),
+            model=Gemini(model="gemini-2.5-flash"),
             name="TxtFile_Parser_Agent",
             instruction="""Your job is to extract text from a .txt file (Job Description).
             From the input, extract the JD path (e.g., /path/to/jd.txt).

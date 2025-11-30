@@ -14,20 +14,20 @@ class PDFParserAgent:
         self.parser = PDFParser()
         self.agent = self._create_agent()
 
-    def _extract_using_tika(self, pdf_path: str, context: ToolContext) -> str:
+    def _extract_using_tika(self, pdf_path: str, tool_context: ToolContext) -> str:
         """
         Extract text from PDF and store in context.
 
         Args:
             pdf_path: Path to the PDF file
-            context: Tool context for storing state
+            tool_context: Tool context for storing state
 
         Returns:
             Extracted text
         """
         text = self.parser.extract_text(pdf_path)
         # Store in context state so other agents can access it
-        context.state["CV_text"] = text
+        tool_context.state["CV_text"] = text
         return text
 
     def _create_agent(self) -> LlmAgent:
@@ -35,7 +35,7 @@ class PDFParserAgent:
         pdf_extract = FunctionTool(self._extract_using_tika)
 
         return LlmAgent(
-            model=Gemini(model="gemini-2.0-flash-exp"),
+            model=Gemini(model="gemini-2.5-flash"),
             name="PDF_Parser_Agent",
             instruction="""Your job is to extract text from a PDF file (CV).
             From the input, extract the CV path (e.g., /path/to/cv.pdf).

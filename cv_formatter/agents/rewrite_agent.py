@@ -15,7 +15,7 @@ class RewriteAgent:
         """Create and configure the LLM agent."""
         return LlmAgent(
             name="Rewrite_Agent",
-            model=Gemini(model="gemini-2.0-flash-exp"),
+            model=Gemini(model="gemini-2.5-flash"),
             instruction="""You are an intelligent CV Rewriting Agent.
 
             Your goal is to rewrite/optimize the candidate's CV to maximize the Applicant Tracking System (ATS) score.
