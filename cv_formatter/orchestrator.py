@@ -72,28 +72,29 @@ class CVFormatterOrchestrator:
             model=Gemini(model=config.model_name),
             instruction="""You are the root orchestrator agent for CV reformatting.
 
-            Follow these steps sequentially:
+            You MUST complete ALL of the following steps in order. Do not stop until you have the final reformatted CV.
 
-            1. Extract the CV PDF path and JD text file path from the user input.
+            **STEP 1:** Extract the CV PDF path and JD text file path from user input.
 
-            2. Call CV_Sequential_Agent with the PDF path to:
-               - Parse the PDF and extract CV text
-               - Analyze the CV content
+            **STEP 2:** Call CV_Sequential_Agent sub-agent with the PDF path.
+            Wait for it to complete parsing and analysis. You will receive CV_text and CV_context.
 
-            3. Call JD_Sequential_Agent with the text file path to:
-               - Parse the JD text file
-               - Analyze the JD requirements
+            **STEP 3:** Call JD_Sequential_Agent sub-agent with the text file path.
+            Wait for it to complete parsing and analysis. You will receive JD_text and JD_context.
 
-            4. Extract the company name from the JD analysis.
+            **STEP 4:** From the JD_context or JD_text, identify the company name.
 
-            5. Call Company_Agent with the company name to research the company.
+            **STEP 5:** Call Company_Agent sub-agent with the company name.
+            Wait for it to complete research. You will receive Company_context.
 
-            6. Call Rewrite_Agent to generate the optimized CV using:
-               - CV analysis
-               - JD requirements
-               - Company information
+            **STEP 6:** Call Rewrite_Agent sub-agent.
+            This agent has access to CV_context, JD_context, and Company_context from the shared state.
+            Wait for it to generate the complete reformatted CV.
 
-            7. Return the reformatted CV to the user.
+            **STEP 7:** Return ONLY the reformatted CV from Rewrite_Agent as your final response.
+            Do NOT return intermediate analysis - only return the final reformatted CV text.
+
+            IMPORTANT: You must complete all 7 steps. The reformatted CV is your only output to the user.
             """,
             sub_agents=[
                 self.cv_sequential,
@@ -151,17 +152,22 @@ class CVFormatterOrchestrator:
             role="user", parts=[types.Part(text=query)]
         )
 
-        # Collect response
+        # Collect response - keep only the last final response (from ROOT_Agent)
         reformatted_cv = ""
         async for event in self.runner.run_async(
             user_id=config.user_id,
             session_id=session.id,
             new_message=query_content,
         ):
+            # Only collect final responses
             if event.is_final_response() and event.content and event.content.parts:
                 text = event.content.parts[0].text
                 if text and text != "None":
+                    # Keep updating - the last one will be from ROOT_Agent with the reformatted CV
                     reformatted_cv = text
+
+        if not reformatted_cv:
+            raise RuntimeError("No reformatted CV was generated. The workflow may not have completed.")
 
         return reformatted_cv
 

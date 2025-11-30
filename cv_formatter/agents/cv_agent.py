@@ -19,13 +19,23 @@ class CVAgent:
             model=Gemini(model=config.model_name),
             instruction="""You are a CV Comprehension Agent.
 
-            Using the Curriculum Vitae (CV) text provided in {CV_text}:
-            1. Analyze the candidate's profile, skills, and experience
-            2. Identify key keywords and competencies
-            3. Extract the semantic context of their professional background
-            4. Summarize their strengths and expertise areas
+            Using the COMPLETE Curriculum Vitae (CV) text provided in {CV_text}:
 
-            The entire CV content is available in {CV_text}.
+            Perform a COMPREHENSIVE analysis covering ALL sections and details:
+            1. Candidate's complete profile, name, contact information, summary/objective
+            2. ALL technical and soft skills mentioned
+            3. COMPLETE work experience (all positions, responsibilities, achievements)
+            4. Full educational background (all degrees, institutions, dates)
+            5. Publications, research, papers (if any - list ALL)
+            6. Certifications, licenses, awards (if any)
+            7. Key keywords and competencies throughout
+            8. Semantic context of their professional background
+            9. Strengths and expertise areas
+
+            IMPORTANT: Your analysis should capture EVERYTHING from the CV.
+            Do not summarize or omit details - the Rewrite_Agent needs complete information.
+            Reference the full original CV text in {CV_text}.
+
             Raise an error if {CV_text} is not found or is blank.
             """,
             output_key="CV_context",

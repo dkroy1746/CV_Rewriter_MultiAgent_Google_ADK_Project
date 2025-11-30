@@ -70,19 +70,19 @@ CVFormatter/
    ```
 
 4. **Set your Google API key in `.env`**:
-
+   
    ```
    GOOGLE_API_KEY=your_actual_api_key_here
    ```
 
 5. **(Optional) Configure model**:
-
+   
    By default, the system uses `gemini-2.5-flash`. You can change this in `.env`:
-
+   
    ```
    MODEL_NAME=gemini-1.5-pro
    ```
-
+   
    Supported models: `gemini-2.5-flash`, `gemini-1.5-pro`, `gemini-1.5-flash`, etc.
 
 ## Usage
@@ -105,26 +105,31 @@ pixi run python -m cv_formatter.main <cv_pdf_path> <jd_txt_path> [OPTIONS]
 ### Examples
 
 **1. Print to terminal (default):**
+
 ```bash
 pixi run python -m cv_formatter.main cv.pdf jd.txt
 ```
 
 **2. Save to file:**
+
 ```bash
 pixi run python -m cv_formatter.main cv.pdf jd.txt -o reformatted_cv.txt
 ```
 
 **3. Save as Markdown:**
+
 ```bash
 pixi run python -m cv_formatter.main cv.pdf jd.txt -o cv.md -f markdown
 ```
 
 **4. Save as HTML:**
+
 ```bash
 pixi run python -m cv_formatter.main cv.pdf jd.txt -o cv.html -f html
 ```
 
 **5. Quiet mode (minimal output):**
+
 ```bash
 pixi run python -m cv_formatter.main cv.pdf jd.txt -o output.txt -q
 ```
@@ -132,16 +137,19 @@ pixi run python -m cv_formatter.main cv.pdf jd.txt -o output.txt -q
 ### Output Formats
 
 **Plain Text** (`-f plain`)
+
 - Clean, ATS-friendly plain text format
 - Best for copy-pasting into application forms
 - Default format
 
 **Markdown** (`-f markdown`)
+
 - Formatted with Markdown headers and structure
 - Includes metadata (generation timestamp)
 - Great for GitHub, documentation tools, or converting to other formats
 
 **HTML** (`-f html`)
+
 - Professional HTML document with CSS styling
 - Print-ready with @media print styles
 - Can be opened directly in web browsers
