@@ -1,4 +1,5 @@
 # CV Rewriter Multi-Agent
+<img src="CV_Rewriter_Thumbnail.png" width="800">
 
 A multi-agent system built with Google ADK (Agent Development Kit) that optimizes CVs to match job descriptions and maximize ATS (Applicant Tracking System) scores.
 
