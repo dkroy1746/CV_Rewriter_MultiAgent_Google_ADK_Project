@@ -28,6 +28,9 @@ class Config:
         self.app_name = os.getenv("APP_NAME", "CVFormatter")
         self.user_id = os.getenv("USER_ID", "default_user")
 
+        # Model configuration
+        self.model_name = os.getenv("MODEL_NAME", "gemini-2.5-flash")
+
     @property
     def is_configured(self) -> bool:
         """Check if configuration is valid."""

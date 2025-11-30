@@ -9,7 +9,8 @@ from cv_formatter import CVFormatterOrchestrator, config
 async def main():
     """Main entry point."""
     print("CV Formatter - Multi-Agent CV Optimization System")
-    print(f"Using API Key: {'✓ Configured' if config.is_configured else '✗ Missing'}\n")
+    print(f"Using API Key: {'✓ Configured' if config.is_configured else '✗ Missing'}")
+    print(f"Model: {config.model_name}\n")
 
     if not config.is_configured:
         print("ERROR: GOOGLE_API_KEY not found in .env file")

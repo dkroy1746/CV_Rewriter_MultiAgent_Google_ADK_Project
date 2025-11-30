@@ -3,6 +3,7 @@ from google.adk.agents import LlmAgent
 from google.adk.models.google_llm import Gemini
 from google.adk.tools import FunctionTool, ToolContext
 
+from cv_formatter.config import config
 from cv_formatter.parsers import TextParser
 
 
@@ -38,7 +39,7 @@ class TxtParserAgent:
         txt_extract = FunctionTool(self._read_text_file)
 
         return LlmAgent(
-            model=Gemini(model="gemini-2.5-flash"),
+            model=Gemini(model=config.model_name),
             name="TxtFile_Parser_Agent",
             instruction="""Your job is to extract text from a .txt file (Job Description).
             From the input, extract the JD path (e.g., /path/to/jd.txt).

@@ -2,6 +2,8 @@
 from google.adk.agents import LlmAgent
 from google.adk.models.google_llm import Gemini
 
+from cv_formatter.config import config
+
 
 class CVAgent:
     """Agent for analyzing CV content."""
@@ -14,7 +16,7 @@ class CVAgent:
         """Create and configure the LLM agent."""
         return LlmAgent(
             name="CV_Agent",
-            model=Gemini(model="gemini-2.5-flash"),
+            model=Gemini(model=config.model_name),
             instruction="""You are a CV Comprehension Agent.
 
             Using the Curriculum Vitae (CV) text provided in {CV_text}:

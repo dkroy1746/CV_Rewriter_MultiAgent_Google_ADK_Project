@@ -3,6 +3,8 @@ from google.adk.agents import LlmAgent
 from google.adk.models.google_llm import Gemini
 from google.adk.tools import google_search
 
+from cv_formatter.config import config
+
 
 class RewriteAgent:
     """Agent for rewriting CVs to match job descriptions."""
@@ -15,7 +17,7 @@ class RewriteAgent:
         """Create and configure the LLM agent."""
         return LlmAgent(
             name="Rewrite_Agent",
-            model=Gemini(model="gemini-2.5-flash"),
+            model=Gemini(model=config.model_name),
             instruction="""You are an intelligent CV Rewriting Agent.
 
             Your goal is to rewrite/optimize the candidate's CV to maximize the Applicant Tracking System (ATS) score.

@@ -3,6 +3,7 @@ from google.adk.agents import LlmAgent
 from google.adk.models.google_llm import Gemini
 from google.adk.tools import FunctionTool, ToolContext
 
+from cv_formatter.config import config
 from cv_formatter.parsers import PDFParser
 
 
@@ -35,7 +36,7 @@ class PDFParserAgent:
         pdf_extract = FunctionTool(self._extract_using_tika)
 
         return LlmAgent(
-            model=Gemini(model="gemini-2.5-flash"),
+            model=Gemini(model=config.model_name),
             name="PDF_Parser_Agent",
             instruction="""Your job is to extract text from a PDF file (CV).
             From the input, extract the CV path (e.g., /path/to/cv.pdf).

@@ -2,6 +2,8 @@
 from google.adk.agents import LlmAgent
 from google.adk.models.google_llm import Gemini
 
+from cv_formatter.config import config
+
 
 class JDAgent:
     """Agent for analyzing Job Description content."""
@@ -14,7 +16,7 @@ class JDAgent:
         """Create and configure the LLM agent."""
         return LlmAgent(
             name="JD_Agent",
-            model=Gemini(model="gemini-2.5-flash"),
+            model=Gemini(model=config.model_name),
             instruction="""You are a Job Description Comprehension Agent.
 
             Using the Job Description (JD) text provided in {JD_text}:

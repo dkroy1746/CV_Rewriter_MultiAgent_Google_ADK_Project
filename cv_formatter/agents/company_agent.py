@@ -3,6 +3,8 @@ from google.adk.agents import LlmAgent
 from google.adk.models.google_llm import Gemini
 from google.adk.tools import google_search
 
+from cv_formatter.config import config
+
 
 class CompanyAgent:
     """Agent for researching company information."""
@@ -15,7 +17,7 @@ class CompanyAgent:
         """Create and configure the LLM agent."""
         return LlmAgent(
             name="Company_Agent",
-            model=Gemini(model="gemini-2.5-flash"),
+            model=Gemini(model=config.model_name),
             instruction="""You are a Company Research Agent.
 
             When provided with a company name:

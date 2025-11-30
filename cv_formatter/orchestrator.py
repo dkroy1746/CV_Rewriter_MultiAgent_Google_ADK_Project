@@ -69,7 +69,7 @@ class CVFormatterOrchestrator:
         """Create the root orchestrator agent."""
         return LlmAgent(
             name="ROOT_Agent",
-            model=Gemini(model="gemini-2.5-flash"),
+            model=Gemini(model=config.model_name),
             instruction="""You are the root orchestrator agent for CV reformatting.
 
             Follow these steps sequentially:
