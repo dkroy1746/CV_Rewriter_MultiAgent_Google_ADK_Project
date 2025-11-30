@@ -3,20 +3,17 @@
 A multi-agent system built with Google ADK (Agent Development Kit) that optimizes CVs to match job descriptions and maximize ATS (Applicant Tracking System) scores.
 
 ## Features
-
-- **PDF Parsing**: Extracts text from CV PDFs using Apache Tika
-- **Multi-Agent Architecture**: Uses specialized agents for different tasks:
-  - PDF Parser Agent: Extracts CV text
-  - Text Parser Agent: Reads job descriptions
+- **PDF and .txt Parsing Tool**: Extracts text from CV PDFs using Apache Tika and text from the txt file.
+- **Multi-Agent Architecture**: Uses specialized agents **parallelly** and **sequentially** for different tasks:
   - CV Agent: Analyzes candidate profile and skills
   - JD Agent: Analyzes job requirements
   - Company Agent: Researches company information
   - Rewrite Agent: Optimizes CV for ATS
 - **Context Sharing**: Agents share information through shared context state
+- **Sessions & Memory**: The orchestrator shares the session memory across all the sessions
 - **Modular OOP Design**: Clean, maintainable architecture
 
 ## Architecture
-
 ```
 CVFormatter/
 ├── cv_formatter/
@@ -51,11 +48,11 @@ graph TD
     ParallelStart --> CVPath[CV Path]
     ParallelStart --> JDPath[JD Path]
 
-    CVPath --> PDFParser[PDF Parser Agent<br/>Extract CV Text]
+    CVPath --> PDFParser[PDF Parser Tool<br/>Extract CV Text]
     PDFParser --> CVAgent[CV Agent<br/>Comprehensive Analysis]
     CVAgent --> CVContext[CV_context<br/>CV_text]
 
-    JDPath --> TxtParser[Text Parser Agent<br/>Read JD File]
+    JDPath --> TxtParser[Text Parser Tool<br/>Read JD File]
     TxtParser --> JDAgent[JD Agent<br/>Requirements Analysis]
     JDAgent --> JDContext[JD_context<br/>JD_text]
 
@@ -91,12 +88,49 @@ graph TD
 
     style RewriteAgent fill:#388e3c,stroke:#1b5e20,color:#ffffff
 ```
+## How It Works
 
+### Agents
+1. **CV Sequential Agent**:
+   - PDF Parser Agent extracts text from CV
+   - CV Agent analyzes candidate profile
+
+3. **JD Sequential Agent**:   
+   - Text Parser Agent reads job description
+   - JD Agent analyzes job requirements
+
+4. **Company Agent**:   
+   - Uses Google Search to research the company
+   - Gathers vision, culture, and goals
+
+5. **Rewrite Agent**:   
+   - Combines all analyses
+   - Generates ATS-optimized CV
+   - Maintains authenticity
+
+### Context Variables
+Agents share data through context state:
+- `CV_text`: Raw CV text
+- `CV_context`: CV analysis
+- `JD_text`: Raw JD text
+- `JD_context`: JD analysis
+- `Company_context`: Company research
+- `Reformatted_CV`: Final optimized CV
+
+### The system will:
+1. Parse your CV PDF and extract text
+2. Parse the job description text file
+3. Analyze your CV content (skills, experience, keywords)
+4. Analyze the JD requirements
+5. Research the hiring company
+6. Generate an optimized CV
+  
 **Key Components:**
 
 - **Parallel Processing**: CV and JD are processed simultaneously for efficiency
 - **Context Sharing**: All agents share state through context variables (`CV_text`, `JD_context`, etc.)
 - **Sequential Workflow**: Company research → Final CV rewrite happens after initial processing
+- **Sessions and Memory**: Memory management for retrieving conversation history and state
 - **Output Formats**: Supports plain text, Markdown, and HTML output
 
 ## Prerequisites
@@ -213,55 +247,11 @@ pixi run python -m cv_formatter.main cv.pdf jd.txt -o output.txt -q
 - Styled with clean, professional formatting
 
 ### Expected Output
-
-The system will:
-
-1. Parse your CV PDF and extract text
-2. Parse the job description text file
-3. Analyze your CV content (skills, experience, keywords)
-4. Analyze the JD requirements
-5. Research the hiring company
-6. Generate an optimized CV that:
+Generates a new fine-tuned CV such that it:
    - Matches job requirements
    - Includes relevant keywords
    - Aligns with company culture
    - Maximizes ATS score
-
-## How It Works
-
-### Agent Workflow
-
-1. **CV Sequential Agent**:
-   
-   - PDF Parser Agent extracts text from CV
-   - CV Agent analyzes candidate profile
-
-2. **JD Sequential Agent**:
-   
-   - Text Parser Agent reads job description
-   - JD Agent analyzes job requirements
-
-3. **Company Agent**:
-   
-   - Uses Google Search to research the company
-   - Gathers vision, culture, and goals
-
-4. **Rewrite Agent**:
-   
-   - Combines all analyses
-   - Generates ATS-optimized CV
-   - Maintains authenticity
-
-### Context Variables
-
-Agents share data through context state:
-
-- `CV_text`: Raw CV text
-- `CV_context`: CV analysis
-- `JD_text`: Raw JD text
-- `JD_context`: JD analysis
-- `Company_context`: Company research
-- `Reformatted_CV`: Final optimized CV
 
 ## Configuration
 
